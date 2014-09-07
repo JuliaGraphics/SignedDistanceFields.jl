@@ -30,22 +30,25 @@ path = "/Users/yurivish/Desktop/a_small.png"
 I = 102
 J = 100
 
-firsttrue(vec) = for i in 1:length(vec)    vec[i] && return i end
-lasttrue(vec)  = for i in length(vec):-1:1 vec[i] && return i end
+function sqdist1d(vec::Vector{Bool})
+	# Sweep forward; then sweep back.
+	# TODO: Investigate immediate sweepback
+	# as far back as required; better cache
+	# locality that way.
+	distsq = fill(typemax(Int) >> 2, size(vec)) # Choose the largest value s.t. it squared + c < typemax
 
-function dt1d(vec::Vector{Bool})
-	distsq = fill(typemax(Int), size(vec))
-
-	d = 0
-	for i in firsttrue(vec):length(vec)
+	d = -1
+	for i in 1:length(vec)
 		val = vec[i]
+		d < 0 && !val && continue
 		d = val ? 0 : d + 1
 		distsq[i] = d^2
 	end
 
-	d = 0
-	for i in lasttrue(vec):-1:1
+	d = -1
+	for i in length(vec):-1:1
 		val = vec[i]
+		d < 0 && !val && continue
 		d = val ? 0 : d + 1
 		distsq[i] = min(distsq[i], d^2)
 	end
@@ -53,8 +56,39 @@ function dt1d(vec::Vector{Bool})
 	distsq
 end
 
-dt1d([false, false, true, false, false, false, false, false, true, true, false, true])
+function sqdist2d(arr)
+	dists2 = fill(typemax(Int), size(arr))
 
+	dists = mapslices(sqdist1d, arr, 1)
+	println("Column distances:")
+	println(dists)
+	
+    for i = 1:size(dists,1)
+		for j = 1:size(dists,2)
+			for k = 1:size(dists,2)
+		        dists2[i, j] = min(dists[i, j], dists[i, k] + (j - k)^2)
+			end
+		end
+    end
+
+	println("Sqdist2d:")
+    dists2
+end
+
+# row = [false, false, false, false, false, false, false, false, true, true, false, true];
+# sqdist1d(row)
+mat = [
+	true false false;
+	false false false;
+	false false true
+];
+
+println("Matrix:")
+mat
+sqdist2d(mat)
+
+
+# TODO: Determine which orientation (rc, cr) is better for cache locality
 
 
 
