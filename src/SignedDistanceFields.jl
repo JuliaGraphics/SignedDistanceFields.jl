@@ -14,6 +14,8 @@ function xsweep!(img, out, y, xitr)
 	end
 end
 
+# Given a 2D image, calculate its Euclidean distance field
+# using an approach due to Saito and Toriwaki (1994).
 function edf_sq(img)
 	# An upper bound for the distance between two pixels
 	maxval = prod(size(img))^2
@@ -39,6 +41,7 @@ function edf_sq(img)
 	df_sq
 end
 
+edf(img) = sqrt(edf_sq(img))
 sdf(img) = sqrt(edf_sq(img)) - sqrt(edf_sq(!img))
 sdf(infname::String, outfname::String) = imwrite(sdf(imread(infname)), outfname)
 
