@@ -2,7 +2,7 @@ module SignedDistanceFields
 
 using Images, Color, FixedPointNumbers
 
-function sweep1d!(img, y, out, itr)
+function sweeprow!(img, y, out, itr)
 	dist = -1
 	for x in itr
 		val = img[y, x]
@@ -13,19 +13,19 @@ function sweep1d!(img, y, out, itr)
 end
 
 function sqdistancetransform(img)
-	# An upper bound (not supremum) for the
-	# squared distance between any two pixels
-	maxval = prod(size(img))^2
+	# Calculate an upper bound for the
+	# squared distance between two pixels
+	bound = prod(size(img))^2
 
 	# Calculate the one-dimensional distance
-	# transform for each row individually
-	sqdist_x = fill(maxval, size(img))
+	# transform for each row
+	sqdist_x = fill(bound, size(img))
 	for y in 1:size(img, 1)
-		sweep1d!(img, y, sqdist_x, 1:size(img, 2))
-		sweep1d!(img, y, sqdist_x, reverse(1:size(img, 2)))
+		sweeprow!(img, y, sqdist_x, 1:size(img, 2))
+		sweeprow!(img, y, sqdist_x, reverse(1:size(img, 2)))
 	end
 
-	sqdist = fill(maxval, size(img))
+	sqdist = fill(bound, size(img))
 	for x in 1:size(img, 2)
 		for y in 1:size(img, 1)
 			for yp in 1:size(img, 1)
@@ -58,11 +58,12 @@ println("img[1] = ", img[1])
 bitmap = map(c -> c != 1, img)
 
 # TODO: Can we calculate the SDF in one pass rather than two?
-# TODO: + -> -
 sdf(img) = sqrt(sqdistancetransform(img)) - sqrt(sqdistancetransform(!img))
 
 # println(bitmap)
+println("sdfing.")
 @time result = sdf(bitmap)
+println("done sdfing.")
 
 # Rescale to [0, 1]
 result = abs(result)
