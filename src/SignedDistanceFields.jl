@@ -2,44 +2,51 @@ module SignedDistanceFields
 
 using Images, Color, FixedPointNumbers
 
+function sweep1d!(img, y, out, itr)
+	dist = -1
+	for x in itr
+		val = img[y, x]
+		dist < 0 && !val && continue
+		dist = val ? 0 : dist + 1
+		out[y, x] = min(out[y, x], dist^2)
+	end
+end
+
 function sqdistancetransform(img)
-	maxval = typemax(Int) >> 2
-	distsq = fill(maxval, size(img))
+	# An upper bound (not supremum) for the
+	# squared distance between any two pixels
+	maxval = prod(size(img))^2
 
-	for r = 1:size(img, 2)
-		 d = -1
-		 for c in 1:size(img, 1)
-		 	val = img[c, r]
-		 	d < 0 && !val && continue
-		 	d = val ? 0 : d + 1
-		 	distsq[c, r] = d^2
-		 end
-
-		 d = -1
-		 for c in size(img, 1):-1:1
-		 	val = img[c, r]
-		 	d < 0 && !val && continue
-		 	d = val ? 0 : d + 1
-		 	distsq[c, r] = min(distsq[c, r], d^2)
-		 end
+	# Calculate the one-dimensional distance
+	# transform for each row individually
+	sqdist_x = fill(maxval, size(img))
+	for y in 1:size(img, 1)
+		sweep1d!(img, y, sqdist_x, 1:size(img, 2))
+		sweep1d!(img, y, sqdist_x, reverse(1:size(img, 2)))
 	end
 
-	all = fill(maxval, size(img))
-
-    for i = 1:size(distsq, 1)
-		for j = 1:size(distsq, 2)
-			for k = 1:size(distsq, 2)
-				rowdist = (j - k)^2
-				rowdist > all[i, j] && break
-		        all[i, j] = min(all[i, j], distsq[i, k] + rowdist)
+	sqdist = fill(maxval, size(img))
+	for x in 1:size(img, 2)
+		for y in 1:size(img, 1)
+			for yp in 1:size(img, 1)
+				sqdist_y = (y - yp)^2
+				sqdist_y > sqdist[y, x] && break
+				sqdist[y, x] = min(sqdist[y, x], sqdist_x[yp, x] + sqdist_y)
 			end
 		end
-    end
+	end
 
-    all
+	sqdist
 end
 
 # TODO: Determine which orientation (rc, cr) is better for cache locality
+
+img = [
+	false false false;
+	true false false;
+	false false false;
+]
+println(sqdistancetransform(img))
 
 path = "/Users/yurivish/Desktop/a_1000.jpg"
 # path = "/Users/yurivish/Desktop/a_500.jpg"
