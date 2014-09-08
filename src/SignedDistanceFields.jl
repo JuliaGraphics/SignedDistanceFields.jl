@@ -1,8 +1,17 @@
 module SignedDistanceFields
 
+# Given a 2D image, calculate its Euclidean distance transform
+# with an approach due to Saito and Toriwaki (1994).
+#
+# Here's a link to a comparative survey of EDT algorithms, which 
+# found Saito's algorithm to be the simplest, and almost as fast
+# as Meijster and Maurer's approaches.
+# http://www.agencia.fapesp.br/arquivos/survey-final-fabbri-ACMCSurvFeb2008.pdf
+
+
 using Images, Color, FixedPointNumbers
 
-export sdf
+export edf, sdf
 
 function xsweep!(img, out, y, xitr)
 	dist = -1
@@ -14,8 +23,6 @@ function xsweep!(img, out, y, xitr)
 	end
 end
 
-# Given a 2D image, calculate its Euclidean distance field
-# using an approach due to Saito and Toriwaki (1994).
 function edf_sq(img)
 	# An upper bound for the distance between two pixels
 	maxval = prod(size(img))^2
@@ -43,6 +50,5 @@ end
 
 edf(img) = sqrt(edf_sq(img))
 sdf(img) = sqrt(edf_sq(img)) - sqrt(edf_sq(!img))
-sdf(infname::String, outfname::String) = imwrite(sdf(imread(infname)), outfname)
 
 end # module
