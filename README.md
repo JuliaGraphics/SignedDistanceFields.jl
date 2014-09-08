@@ -8,6 +8,6 @@ There is also an `edf` function with identical usage that calculates the Euclide
 
 Signed distance fields are a useful representation for rendering glyphs and other shapes with crisp edges using OpenGL. By allowing the graphics hardware to interpolate between distance samples and testing for the shape boundary in the vertex shader, you can get surprisingly high-resolution output from smaller SDFs, provided that they were downsampled from high-resolution bitmaps.
 
-Here's a [paper from Valve](http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf) introducing the idea and here's a [good blog post](https://www.mapbox.com/blog/text-signed-distance-fields/) about using signed distance fields to render text from [Mapbox](http://mapbox.com).
+Here's a [paper from Valve](http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf) introducing the idea and here's a [good blog post](https://www.mapbox.com/blog/text-signed-distance-fields/) about using signed distance fields.
 
 [![Build Status](https://travis-ci.org/yurivish/SignedDistanceFields.jl.svg?branch=master)](https://travis-ci.org/yurivish/SignedDistanceFields.jl)
