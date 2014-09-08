@@ -1,7 +1,8 @@
 module SignedDistanceFields
 
 # This package calculates the signed distance field for 2d images
-# using an approach due to Saito and Toriwaki (1994).
+# using an approach due to Saito and Toriwaki (1994). The
+# generalization to 3d is straightforward but not implemented.
 #
 # A recent comparative survey of algorithms for the Euclidean distance
 # transform (upon which the SDF is based) found Saito's algorithm to be
