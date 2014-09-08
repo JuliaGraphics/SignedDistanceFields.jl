@@ -4,8 +4,10 @@ module SignedDistanceFields
 # field using an approach due to Saito and Toriwaki (1994).
 #
 # A recent comparative survey of algorithms for the Euclidean distance
-# transform (which the SDF is based on) found Saito's algorithm to be
-# very simple while still remaining competitive with the fastest approaches.
+# transform (upon which the SDF is based) found Saito's algorithm to be
+# a good tradeoff between simplicity and performance. Those interested
+# in the fastest approach should look into Meijster's algorithm, which 
+# is an optimization of the basic approach implemented below.
 #
 # Link to survey:
 # http://www.agencia.fapesp.br/arquivos/survey-final-fabbri-ACMCSurvFeb2008.pdf
