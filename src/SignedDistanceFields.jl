@@ -1,8 +1,8 @@
 module SignedDistanceFields
 
-# Given a 2D image, this package calculates its signed distance field
-# via the Euclidean distance transform, with an approach due to
-# Saito and Toriwaki (1994).
+# Given a 2D image, this package calculates its signed distance
+# field via the Euclidean distance transform, with an approach 
+# due to Saito and Toriwaki (1994).
 #
 # A recent comparative survey of EDT algorithms found Saito's
 # algorithm to be the simplest among all while still remaining 
