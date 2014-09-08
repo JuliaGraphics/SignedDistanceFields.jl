@@ -4,8 +4,8 @@ using Base.Test
 T = true
 F = false
 
-@test edf([]) == []
-@test edf([T]) == [0.0]
+@test edf([])     == [ ]
+@test edf([T])    == [0.0]
 @test edf([T, T]) == [0.0, 0.0]
 
 @test edf([T, T, F, F, F, F]) == [0.0, 0.0, 1.0, 2.0, 3.0, 4.0]
