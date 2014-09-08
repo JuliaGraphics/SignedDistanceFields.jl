@@ -1,15 +1,17 @@
 module SignedDistanceFields
 
-# Given a 2D image, calculate its Euclidean distance transform
-# with an approach due to Saito and Toriwaki (1994).
+# Given a 2D image, this package calculates its Euclidean distance
+# transform with an approach due to Saito and Toriwaki (1994).
 #
-# Here's a link to a comparative survey of EDT algorithms, which 
-# found Saito's algorithm to be the simplest, and almost as fast
-# as Meijster and Maurer's approaches.
+# A recent comparative survey of EDT algorithms found Saito's
+# algorithm to be the simplest among all while still remaining 
+# almost as fast as the fastest approaches.
+#
+# Meijster's algorithm, which was one of the two best-performing,
+# optimizes Saito's algorithm at the cost of some code complexity.
+# 
+# Link to survey:
 # http://www.agencia.fapesp.br/arquivos/survey-final-fabbri-ACMCSurvFeb2008.pdf
-
-
-using Images, Color, FixedPointNumbers
 
 export edf, sdf
 
@@ -19,7 +21,7 @@ function xsweep!(img, out, y, xitr)
 		val = img[y, x]
 		dist < 0 && !val && continue
 		dist = val ? 0 : dist + 1
-		rowdf_sq[y, x] = min(rowdf_sq[y, x], dist^2)
+		out[y, x] = min(out[y, x], dist^2)
 	end
 end
 
@@ -28,6 +30,8 @@ function edf_sq(img)
 	maxval = prod(size(img))^2
 
 	# Calculate the row-wise distance transform for each row
+	# in two passes, taking the minimum of the distance-from-
+	# left and distance-from-right.
 	rowdf_sq = fill(maxval, size(img))
 	for y in 1:size(img, 1)
 		xsweep!(img, rowdf_sq, y, 1:size(img, 2))
@@ -45,6 +49,7 @@ function edf_sq(img)
 			end
 		end
 	end
+
 	df_sq
 end
 

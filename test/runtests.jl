@@ -1,5 +1,29 @@
 using SignedDistanceFields
 using Base.Test
 
-# write your own tests here
-@test 1 == 1
+T = true
+F = false
+
+@test edf([]) == []
+@test edf([T]) == [0.0]
+@test edf([T, T]) == [0.0, 0.0]
+
+@test edf([T, T, F, F, F, F]) == [0.0, 0.0, 1.0, 2.0, 3.0, 4.0]
+@test edf([F, F, T, T, F, F]) == [2.0, 1.0, 0.0, 0.0, 1.0, 2.0]
+@test edf([F, F, F, F, T, T]) == [4.0, 3.0, 2.0, 1.0, 0.0, 0.0]
+@test edf([F, T, F, F, T, F]) == [1.0, 0.0, 1.0, 1.0, 0.0, 1.0]
+
+@test sdf([T, T, F, F, F, F]) == [-2.0, -1.0, 1.0, 2.0, 3.0, 4.0]
+@test sdf([F, F, T, T, F, F]) == [2.0, 1.0, -1.0, -1.0, 1.0, 2.0]
+@test sdf([F, F, F, F, T, T]) == [4.0, 3.0, 2.0, 1.0, -1.0, -2.0]
+@test sdf([F, T, F, F, T, F]) == [1.0, -1.0, 1.0, 1.0, -1.0, 1.0]
+
+@test sdf([
+	T F F;
+	F F F;
+	F F F
+]) == [
+	-1.0  1.0          2.0;
+	 1.0  sqrt(2)      sqrt(1 + 4);
+	 2.0  sqrt(1 + 4)  sqrt(4 + 4)
+]
