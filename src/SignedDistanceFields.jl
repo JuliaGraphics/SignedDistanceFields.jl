@@ -71,7 +71,6 @@ function downsample(img, xsize, ysize=xsize)
 			xscale == size(img, 2) / xsize
 
 	out = Array(Float64, xsize, ysize)
-
 	for y in 1:ysize
 		for x in 1:xsize
 			yinds = (1 + (y-1) * yscale):(y * yscale)
@@ -79,7 +78,6 @@ function downsample(img, xsize, ysize=xsize)
 			out[y, x] = mean(sub(img, yinds, xinds))
 		end
 	end
-
 	out
 end
 
