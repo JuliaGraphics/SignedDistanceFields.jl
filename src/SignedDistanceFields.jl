@@ -15,34 +15,18 @@ module SignedDistanceFields
 
 export edf, sdf
 
-# function xsweep!(img, out, y, xitr)
-# 	dist = -1
-# 	for x in xitr
-# 		val = img[y, x]
-# 		dist < 0 && !val && continue
-# 		dist = val ? 0 : dist + 1
-# 		out[y, x] = min(out[y, x], dist^2)
-# 	end
-# end
-
-function xsweep!(row, out)
+function xsweep!(img, out, y, xitr)
 	dist = -1
-	for (i, val) in enumerate(row)
+	for x in xitr
+		val = img[y, x]
 		dist < 0 && !val && continue
 		dist = val ? 0 : dist + 1
-		out[i] = min(out[i], dist^2)
+		out[y, x] = min(out[y, x], dist^2)
 	end
-
-	# for x in xitr
-	# 	val = img[y, x]
-	# 	dist < 0 && !val && continue
-	# 	dist = val ? 0 : dist + 1
-	# 	out[y, x] = min(out[y, x], dist^2)
-	# end
 end
 
 function edf_sq(img)
-	@assert ndims(img) == 2 "Image must be two-dimensional"
+	ndims(img) == 2 || throw(ArgumentError("Image must be two-dimensional"))
 
 	# An upper bound for the distance between two pixels
 	maxval = prod(size(img))^2
@@ -53,10 +37,8 @@ function edf_sq(img)
 	# left and distance-from-right.
 	rowdf_sq = fill(maxval, size(img))
 	for y in 1:ncols
-		# xsweep!(img, rowdf_sq, y, 1:nrows)
-		# xsweep!(img, rowdf_sq, y, reverse(1:nrows))
-		xsweep!(sub(img, y, 1:nrows), sub(rowdf_sq, y, 1:nrows))
-		xsweep!(sub(img, y, reverse(1:nrows)), sub(rowdf_sq, y, reverse(1:nrows)))
+		xsweep!(img, rowdf_sq, y, 1:nrows)
+		xsweep!(img, rowdf_sq, y, reverse(1:nrows))
 	end
 
 	# Use the row-wise information to compute the full distance transform
