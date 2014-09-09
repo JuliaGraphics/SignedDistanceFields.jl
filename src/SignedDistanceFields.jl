@@ -56,5 +56,27 @@ end
 
 edf(img) = sqrt(edf_sq(img))
 sdf(img) = sqrt(edf_sq(img)) - sqrt(edf_sq(!img))
+sdf(img, xsize, ysize=xsize) = downsample(sdf(img), xsize, ysize))
+
+function downsample(img, xsize, ysize=xsize)
+	yscale = div(size(img, 1), ysize)
+	xscale = div(size(img, 2), xsize)
+
+	# Make sure we're downsampling by integer amounts
+	@assert yscale == size(img, 1) / ysize &&
+			xscale == size(img, 2) / xsize
+
+	out = Array(Float64, xsize, ysize)
+
+	for y in 1:ysize
+		for x in 1:xsize
+			yinds = (1 + (y-1) * yscale):(y * yscale)
+			xinds = (1 + (x-1) * xscale):(x * xscale)
+			out[y, x] = mean(sub(img, yinds, xinds))
+		end
+	end
+
+	out
+end
 
 end # module
