@@ -2,7 +2,9 @@
 
 This package implements an algorithm for quickly computing signed distance fields in 2D.
 
-`result = sdf(img)`, where `img` is a 2-dimensional boolean array with `true` indicating the foreground and `false` indicating the background. There is also a `sdf(img, xsize, ysize=xsize)` form for creating downsampled distance fields.
+`result = sdf(img)`, where `img` is a 2-dimensional boolean array with `true` indicating the foreground and `false` indicating the background.
+
+If you want a downsampled distance field instead, you can call `sdf(img, xsize, ysize=xsize)`, passing it your desired output dimensions. Note that the image dimensions must be an integer multiple of the scaled-down dimensions; this makes for a very clean mapping between a region in the full SDF and each corresponding pixel in the downsampled version.
 
 There is also an `edf` function with identical usage that calculates the Euclidean distance transform -- the distance from every background pixel to the closest pixel in the foreground.
 
