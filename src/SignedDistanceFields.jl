@@ -46,9 +46,9 @@ function edf_sq(img)
 	for x in 1:nrows
 		for y in 1:ncols
 			for yp in 1:ncols
-				ydistsq = (y - yp)^2
-				ydistsq > df_sq[y, x] && break
-				df_sq[y, x] = min(df_sq[y, x], rowdf_sq[yp, x] + ydistsq)
+				ydist_sq = (y - yp)^2
+				ydist_sq > df_sq[y, x] && break
+				df_sq[y, x] = min(df_sq[y, x], rowdf_sq[yp, x] + ydist_sq)
 			end
 		end
 	end
