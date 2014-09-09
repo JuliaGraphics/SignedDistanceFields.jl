@@ -28,7 +28,7 @@ end
 function edf_sq(img)
 	# An upper bound for the distance between two pixels
 	maxval = prod(size(img))^2
-	ncols, nrows = size(img)
+	ncols, nrows = size(img, 1), size(img, 2)
 
 	# Calculate the row-wise distance transform for each row
 	# in two passes, taking the minimum of the distance-from-
@@ -56,7 +56,7 @@ end
 
 edf(img) = sqrt(edf_sq(img))
 sdf(img) = sqrt(edf_sq(img)) - sqrt(edf_sq(!img))
-sdf(img, xsize, ysize=xsize) = downsample(sdf(img), xsize, ysize))
+sdf(img, xsize, ysize=xsize) = downsample(sdf(img), xsize, ysize)
 
 function downsample(img, xsize, ysize=xsize)
 	yscale = div(size(img, 1), ysize)
