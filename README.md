@@ -4,7 +4,7 @@ This package implements an algorithm for quickly computing signed distance field
 
 `result = sdf(img)`, where `img` is a 2-dimensional boolean array with `true` indicating the foreground and `false` indicating the background.
 
-If you want a downsampled distance field, you can call `sdf(img, xsize[, ysize=xsize])`, and pass it your desired output dimensions. **Note:** Right now only scaling by integer amounts is supported (e.g. turning a 1024x1024 image into a 64x64 SDF or 500x500 image into a 125x125 SDF).
+If you want a downsampled distance field, you can call `sdf(img, xsize[, ysize=xsize])`, and pass it your desired output dimensions. Right now only scaling by integer amounts is supported (e.g. turning a 1024x1024 image into a 64x64 SDF or 500x500 image into a 125x125 SDF).
 
 There is also an `edf` function with identical usage that calculates the Euclidean distance transform -- the distance from every background pixel to the closest pixel in the foreground.
 
