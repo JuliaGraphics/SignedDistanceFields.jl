@@ -63,12 +63,11 @@ sdf(img) = sqrt(edf_sq(img)) - sqrt(edf_sq(!img))
 sdf(img, xsize, ysize=xsize) = downsample(sdf(img), xsize, ysize)
 
 function downsample(img, xsize, ysize=xsize)
-	yscale = div(size(img, 1), ysize)
-	xscale = div(size(img, 2), xsize)
+	yscale, yrem = divrem(size(img, 1), ysize)
+	xscale, xrem = divrem(size(img, 2), xsize)
 
 	# Make sure we're downsampling by integer amounts
-	@assert yscale == size(img, 1) / ysize &&
-			xscale == size(img, 2) / xsize
+	@assert xrem == yrem == 0 "Downsampling by noninteger amounts is not supported"
 
 	out = Array(Float64, xsize, ysize)
 	for y in 1:ysize
