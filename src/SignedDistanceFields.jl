@@ -1,6 +1,10 @@
 __precompile__(true)
 module SignedDistanceFields
 
+if !isdefined(Base, :view)
+    const view = sub
+end
+
 # This package calculates the signed distance field for 2d images
 # using an approach due to Saito and Toriwaki (1994). The
 # generalization to 3d is straightforward but not implemented.
