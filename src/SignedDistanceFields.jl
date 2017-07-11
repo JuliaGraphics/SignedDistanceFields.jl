@@ -63,7 +63,7 @@ end
 edf(img) = sqrt.(edf_sq(img))
 edf(img, xsize, ysize=xsize) = downsample(edf(img), xsize, ysize)
 
-sdf(img) = sqrt.(edf_sq(img)) .- sqrt.(edf_sq(.!(img)))
+sdf(img) = sqrt.(edf_sq(img)) .- sqrt.(edf_sq((!).(img)))
 sdf(img, xsize, ysize=xsize) = downsample(sdf(img), xsize, ysize)
 
 function downsample(img, xsize, ysize=xsize)
