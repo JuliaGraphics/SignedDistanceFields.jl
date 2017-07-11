@@ -57,14 +57,13 @@ function edf_sq(img)
             end
         end
     end
-
     df_sq
 end
 
-edf(img) = sqrt(edf_sq(img))
+edf(img) = sqrt.(edf_sq(img))
 edf(img, xsize, ysize=xsize) = downsample(edf(img), xsize, ysize)
 
-sdf(img) = sqrt(edf_sq(img)) - sqrt(edf_sq(!img))
+sdf(img) = sqrt.(edf_sq(img)) .- sqrt.(edf_sq(.!(img)))
 sdf(img, xsize, ysize=xsize) = downsample(sdf(img), xsize, ysize)
 
 function downsample(img, xsize, ysize=xsize)
@@ -74,7 +73,7 @@ function downsample(img, xsize, ysize=xsize)
     # Make sure we're downsampling by integer amounts
     @assert xrem == yrem == 0 "Downsampling by noninteger amounts is not supported"
 
-    out = Array(Float64, ysize, xsize)
+    out = Matrix{Float64}(ysize, xsize)
     for y in 1:ysize
         for x in 1:xsize
             yinds = (1 + (y-1) * yscale):(y * yscale)
