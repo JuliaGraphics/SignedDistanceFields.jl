@@ -28,20 +28,11 @@ F = false
 	 2.0  sqrt(1 + 4)  sqrt(4 + 4)
 ]
 
-if VERSION < v"0.4.0-dev"
-    bitrand(x...) = randbool(x...)
-end
-
 
 a = sdf(bitrand(20,20), 10, 10)
 @test size(a) == (10,10)
 a = edf(bitrand(20,20), 10, 10)
 @test size(a) == (10,10)
 
-if VERSION < v"0.4.0-dev"
-	@test_throws ErrorException sdf(bitrand(20,20), 12, 10)
-	@test_throws ErrorException edf(bitrand(20,20), 10, 12)
-else
-	@test_throws AssertionError sdf(bitrand(20,20), 12, 10)
+@test_throws AssertionError sdf(bitrand(20,20), 12, 10)
 	@test_throws AssertionError edf(bitrand(20,20), 10, 12)
-end
