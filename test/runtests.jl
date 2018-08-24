@@ -1,5 +1,5 @@
 using SignedDistanceFields
-using Base.Test
+using Test, Random
 
 T = true
 F = false

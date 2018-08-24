@@ -1,9 +1,6 @@
-__precompile__(true)
 module SignedDistanceFields
 
-if !isdefined(Base, :view)
-    const view = sub
-end
+using Statistics
 
 # This package calculates the signed distance field for 2d images
 # using an approach due to Saito and Toriwaki (1994). The
@@ -73,7 +70,7 @@ function downsample(img, xsize, ysize=xsize)
     # Make sure we're downsampling by integer amounts
     @assert xrem == yrem == 0 "Downsampling by noninteger amounts is not supported"
 
-    out = Matrix{Float64}(ysize, xsize)
+    out = Matrix{Float64}(undef, ysize, xsize)
     for y in 1:ysize
         for x in 1:xsize
             yinds = (1 + (y-1) * yscale):(y * yscale)
